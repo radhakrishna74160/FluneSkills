@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Flune | Requests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <style>
+    :root {
+      --primary: #6366f1;
+      --success: #10b981;
+      --danger: #ef4444;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-light: #64748b;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      min-height: 100vh;
+      color: var(--text-main);
+      padding-bottom: 40px;
+    }
+
+    /* --- Header --- */
+    .header-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn {
+      padding: 8px 16px;
+      border-radius: 50px;
+      background: white;
+      border: 1px solid #cbd5e1;
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      background: var(--text-main);
+      color: white;
+      border-color: var(--text-main);
+    }
+
+    /* --- Layout Container --- */
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    /* --- Request Card Design --- */
+    .request-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Top Row: Avatar & Name */
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .user-details h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .timestamp {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    /* Middle Row: Skills */
+    .skills-box {
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .skill-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .skill-line:last-child { margin-bottom: 0; }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 6px;
+      min-width: 60px;
+      text-align: center;
+    }
+    .badge-offer { background: #e0e7ff; color: #4338ca; }
+    .badge-want { background: #fce7f3; color: #be185d; }
+
+    /* Bottom Row: Actions */
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 5px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .btn:active { transform: scale(0.96); }
+
+    .btn-accept {
+      background: var(--success);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    .btn-accept:hover { background: #059669; }
+
+    .btn-reject {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+    .btn-reject:hover { background: #fecaca; }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      margin-top: 80px;
+      color: var(--text-light);
+      animation: fadeIn 1s;
+    }
+    .empty-state i { font-size: 48px; color: #cbd5e1; margin-bottom: 15px; }
+
+    /* Animation for removal */
+    .removing {
+      transform: scale(0.9);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="header-nav">
+    <div class="page-title">
+      <i class='bx bxs-inbox' style="color:var(--primary)"></i> Inbox
+    </div>
+    <button id="backBtn" class="back-btn">
+      <i class='bx bx-left-arrow-alt'></i> Dashboard
+    </button>
+  </div>
+
+  <div class="container">
+    <div id="list">
+      <div class="empty-state">
+        <i class='bx bx-loader-alt bx-spin'></i>
+        <p>Checking for new requests...</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db } from "./js/firebase.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import {
+      collection, query, where, onSnapshot, updateDoc, doc, getDoc
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const list = document.getElementById("list");
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) return location.replace("index.html");
+
+      // only subscribe to pending incoming requests
+      const q = query(
+        collection(db, "requests"),
+        where("toUid", "==", user.uid),
+        where("status", "==", "pending")
+      );
+
+      onSnapshot(q, async (snap) => {
+        // We clear list initially, but in a real app you might want to diff updates.
+        // For simplicity, we redraw.
+        list.innerHTML = "";
+
+        if (snap.empty) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <i class='bx bx-coffee' ></i>
+              <p>All caught up! No new requests.</p>
+            </div>`;
+          return;
+        }
+
+        // Loop through requests
+        for (const reqDoc of snap.docs) {
+          const r = reqDoc.data();
+
+          // Fetch sender profile
+          // Note: In production, fetching inside a loop can be slow if list is huge.
+          // For a prototype/school project, this is fine.
+          const userSnap = await getDoc(doc(db, "users", r.fromUid));
+          const sender = userSnap.exists() ? userSnap.data() : { name: "Unknown" };
+
+          // Create Elements
+          const div = document.createElement("div");
+          div.className = "request-card";
+
+          const initials = (sender.name || "U").slice(0,2).toUpperCase();
+
+          div.innerHTML = `
+            <div class="card-top">
+              <div class="avatar">${initials}</div>
+              <div class="user-details">
+                <h3>${sender.name || "Unknown User"}</h3>
+                <div class="timestamp">Wants to connect with you</div>
+              </div>
+            </div>
+
+            <div class="skills-box">
+              <div class="skill-line">
+                <span class="badge badge-offer">Offers</span>
+                <span>${sender.offer || "N/A"}</span>
+              </div>
+              <div class="skill-line">
+                <span class="badge badge-want">Wants</span>
+                <span>${sender.want || "N/A"}</span>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-reject">
+                <i class='bx bx-x'></i> Decline
+              </button>
+              <button class="btn btn-accept">
+                <i class='bx bx-check'></i> Accept
+              </button>
+            </div>
+          `;
+
+          // Logic
+          const acceptBtn = div.querySelector(".btn-accept");
+          const rejectBtn = div.querySelector(".btn-reject");
+
+          // Handle Accept
+          acceptBtn.onclick = async () => {
+            // Visual feedback immediately
+            acceptBtn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i>";
+            
+            await updateDoc(doc(db, "requests", reqDoc.id), {
+              status: "accepted"
+            });
+            // The item will disappear because onSnapshot will fire again
+            // But we can add a visual success state if we want
+          };
+
+          // Handle Reject
+          rejectBtn.onclick = async () => {
+            // Add animation class before removing
+            div.classList.add("removing");
+            
+            // Wait for animation to finish slightly
+            setTimeout(async () => {
+              await updateDoc(doc(db, "requests", reqDoc.id), {
+                status: "rejected"
+              });
+              // Element is removed by snapshot update
+            }, 300);
+          };
+
+          list.appendChild(div);
+        }
+      });
+
+      // Back Button Logic
+      document.getElementById("backBtn").onclick = () => {
+        window.location.replace("dashboard.html");
+      };
+    });
+  </script>
+
+</body>
+</html>

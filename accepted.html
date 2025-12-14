@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Fluneskill | My Network</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <style>
+    :root {
+      --primary: #0ea5e9; /* Sky Blue */
+      --secondary: #6366f1; /* Indigo */
+      --success: #10b981;
+      --bg-color: #f0f9ff;
+      --text-main: #0f172a;
+      --text-light: #64748b;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      min-height: 100vh;
+      color: var(--text-main);
+      padding-bottom: 60px;
+    }
+
+    /* --- Header --- */
+    .header-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-main);
+    }
+
+    .back-btn {
+      padding: 8px 16px;
+      border-radius: 50px;
+      background: white;
+      border: 1px solid #cbd5e1;
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      background: var(--text-main);
+      color: white;
+    }
+
+    /* --- Layout --- */
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* --- Business Card Design --- */
+    .contact-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 10px 40px -10px rgba(0,0,0,0.06);
+      border: 1px solid #e2e8f0;
+      transition: transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px -5px rgba(14, 165, 233, 0.15);
+      border-color: #bae6fd;
+    }
+
+    /* Green "Connected" Strip */
+    .status-strip {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--success);
+    }
+
+    /* Profile Header */
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+      color: white;
+      border-radius: 14px;
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3);
+    }
+
+    .info h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .info span {
+      font-size: 13px;
+      color: var(--success);
+      font-weight: 500;
+      background: #ecfdf5;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    /* Skills Summary */
+    .mini-skills {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 20px;
+      border: 1px solid #f1f5f9;
+    }
+    .mini-skills div { margin-bottom: 4px; }
+    .mini-skills div:last-child { margin-bottom: 0; }
+    .label { font-weight: 600; color: var(--text-main); margin-right: 5px; }
+
+    /* Action Buttons (Call/Email) */
+    .actions {
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .action-link {
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-call {
+      background: #f0f9ff;
+      color: #0284c7;
+      border: 1px solid #e0f2fe;
+    }
+    .btn-call:hover { background: #e0f2fe; }
+
+    .btn-email {
+      background: #f0fdf4;
+      color: #059669;
+      border: 1px solid #dcfce7;
+    }
+    .btn-email:hover { background: #dcfce7; }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      margin-top: 60px;
+      color: var(--text-light);
+    }
+    .empty-state i { font-size: 50px; margin-bottom: 15px; color: #cbd5e1; }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="header-nav">
+    <div class="page-title">
+      <i class='bx bxs-group' style="color:var(--primary)"></i> My Network
+    </div>
+    <button id="backBtn" class="back-btn">
+      <i class='bx bx-home-alt'></i> Dashboard
+    </button>
+  </div>
+
+  <div class="container">
+    <div id="acceptedList" class="grid">
+      <div class="empty-state">
+        <i class='bx bx-loader-alt bx-spin'></i>
+        <p>Loading your connections...</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db } from "./js/firebase.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { query, where, getDocs, collection, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const list = document.getElementById("acceptedList");
+
+    async function loadAccepted(uid){
+      list.innerHTML = "";
+
+      // 1. Get requests where I sent AND where I received
+      const q1 = query(collection(db,"requests"), where("fromUid","==",uid), where("status","==","accepted"));
+      const q2 = query(collection(db,"requests"), where("toUid","==",uid), where("status","==","accepted"));
+
+      const [snaps1, snaps2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+      const snaps = [...snaps1.docs, ...snaps2.docs];
+
+      if (!snaps.length) {
+        list.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <i class='bx bx-user-x'></i>
+            <p>You haven't connected with anyone yet.</p>
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = ""; // Clear loading
+
+      for (const s of snaps) {
+        const d = s.data();
+        
+        // Identify who the "other person" is
+        const otherUid = d.fromUid === uid ? d.toUid : d.fromUid;
+        
+        // 2. Fetch their FULL profile (Name, Phone, Email, Offer, Want)
+        let userData = { name: "Unknown", offer: "-", want: "-", phone: "", email: "" };
+        try {
+          const uDoc = await getDoc(doc(db, "users", otherUid));
+          if (uDoc.exists()) {
+            userData = uDoc.data();
+          }
+        } catch (err) {
+          console.error("Failed to fetch user", err);
+        }
+
+        const div = document.createElement("div");
+        div.className = "contact-card";
+        
+        // Create initials
+        const initials = (userData.name || "U").slice(0,2).toUpperCase();
+
+        div.innerHTML = `
+          <div class="status-strip"></div>
+          
+          <div class="card-head">
+            <div class="avatar">${initials}</div>
+            <div class="info">
+              <h3>${userData.name || "Unknown"}</h3>
+              <span><i class='bx bx-check'></i> Connected</span>
+            </div>
+          </div>
+
+          <div class="mini-skills">
+            <div><span class="label">Can Teach:</span> ${userData.offer || "-"}</div>
+            <div><span class="label">Needs:</span> ${userData.want || "-"}</div>
+          </div>
+
+          <div class="actions">
+            <a href="tel:${userData.phone || ''}" class="action-link btn-call">
+              <i class='bx bxs-phone'></i> Call
+            </a>
+            <a href="mailto:${userData.email || ''}" class="action-link btn-email">
+              <i class='bx bxs-envelope'></i> Email
+            </a>
+          </div>
+        `;
+        list.appendChild(div);
+      }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) return location.replace("index.html");
+      loadAccepted(user.uid);
+      
+      document.getElementById("backBtn").onclick = () => window.location.replace("dashboard.html");
+    });
+  </script>
+
+</body>
+</html>

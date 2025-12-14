@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>FluneSkill | Skill Exchange</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <style>
+    :root {
+      --primary: #6366f1; /* Indigo */
+      --secondary: #ec4899; /* Pink */
+      --accent: #8b5cf6; /* Violet */
+      --bg-color: #f8fafc;
+      --surface: #ffffff;
+      --text-dark: #0f172a;
+      --text-gray: #64748b;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      /* Subtle background mesh */
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    /* --- Floating Navigation --- */
+    .navbar {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 1000px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 100px;
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    /* Navbar Brand (Left Corner Logo) */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+        font-weight: 700;
+        font-size: 30px;
+      color: var(--text-dark);
+      text-decoration: none;
+    }
+
+    .brand img {
+      height: 50px; /* Logo size in navbar */
+      width: auto;
+    }
+
+    .brand span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent; 
+      /* Fallback text visibility handled by transparent fill */
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 14px;
+    }
+
+    .nav-btn {
+      font-size: 44px;
+      height: 44px;
+      border-radius: 50%;
+
+    /* Responsive smaller sizes for narrow screens */
+    @media (max-width: 640px) {
+      .brand { font-size: 22px; }
+      .brand i { font-size: 26px; }
+    }
+      border: none;
+      background: transparent;
+      color: var(--text-gray);
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .nav-btn:hover {
+      background: white;
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    }
+    
+    .nav-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Badge */
+    .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 10px;
+      height: 10px;
+      background: #ef4444;
+      border: 2px solid #fff;
+      border-radius: 50%;
+    }
+
+    /* --- Hero Section (Middle Star Place) --- */
+    .hero {
+      margin-top: 140px; /* More space for fixed navbar */
+      text-align: center;
+      padding: 0 20px;
+      margin-bottom: 50px;
+      animation: fadeIn 0.8s ease;
+    }
+    
+    .hero-logo-container {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      border: 2px solid #f1f5f9;
+    }
+
+    .hero-logo-container img {
+      width: 60%;
+      height: 60%;
+      object-fit: contain;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin: 0 0 10px 0;
+      letter-spacing: -1px;
+      color: var(--text-dark);
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-gray);
+      margin: 0;
+    }
+
+    /* --- The Grid --- */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    /* --- "Wonder" Cards --- */
+    .profile-card {
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 24px;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(0,0,0,0.03);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.2);
+    }
+
+    /* Decorative Top Gradient */
+    .card-decoration {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .avatar {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #e0e7ff, #f3e8ff);
+      color: var(--primary);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .user-info h3 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--text-dark);
+    }
+
+    .user-info span {
+      font-size: 13px;
+      color: var(--text-gray);
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-top: 6px;
+      display: inline-block;
+    }
+
+    /* Skills Area */
+    .skill-block {
+      margin-bottom: 20px;
+    }
+
+    .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .skill-tag {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      display: block;
+    }
+    
+    .offer-text { color: var(--text-dark); }
+    .want-text { color: var(--secondary); }
+
+    /* Action Footer */
+    .card-footer {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .connect-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 16px;
+      background: var(--text-dark);
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .connect-btn:hover {
+      background: var(--primary);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .connect-btn:disabled {
+      background: #cbd5e1;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    /* Unlocked Contact State */
+    .contact-revealed {
+      background: #ecfdf5;
+      color: #047857;
+      padding: 15px;
+      border-radius: 16px;
+      font-size: 14px;
+      text-align: center;
+    }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 4px 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Loading / Empty States */
+    .message-box {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px;
+      color: var(--text-gray);
+    }
+    .message-box i { font-size: 48px; margin-bottom: 10px; color: #cbd5e1; }
+
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="brand">
+      <img src="flunelogo.png" alt="Flune Icon">
+      <span>FluneSkills</span>
+    </div>
+    
+    <div class="nav-icons">
+      <button id="notifBtn" class="nav-btn" title="Notifications">
+        <i class='bx bx-bell'></i>
+        <span id="notifBadge" class="badge" style="display:none"></span>
+      </button>
+      
+      <button id="requestsBtn" class="nav-btn" title="Requests">
+        <i class='bx bx-envelope'></i>
+      </button>
+      
+      <button id="friendsBtn" class="nav-btn" title="Connections">
+        <i class='bx bx-user-check'></i>
+      </button>
+      
+      <button id="profileBtn" class="nav-btn" title="Edit Profile">
+        <i class='bx bx-edit-alt'></i>
+      </button>
+
+      <button id="logoutBtn" class="nav-btn" title="Logout" style="color:#ef4444">
+        <i class='bx bx-log-out'></i>
+      </button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-logo-container">
+      <img src="logo.png" alt="Main Logo">
+    </div>
+
+    <h1>Find your genius.</h1>
+    <p>Connect with students who have the skills you need.</p>
+  </div>
+
+  <div class="container">
+    <div id="cards" class="grid">
+      <div class="message-box">
+        <i class='bx bx-loader-alt bx-spin'></i>
+        <p>Curating profiles for you...</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth } from "./js/firebase.js";
+    import { logoutUser } from "./js/auth.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import {
+      collection, getDocs, addDoc, query, where, serverTimestamp, onSnapshot
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    import { db } from "./js/firebase.js";
+
+    const cardsDiv = document.getElementById("cards");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.replace("index.html");
+        return;
+      }
+      await loadProfiles(user.uid);
+      listenNotifications(user.uid);
+    });
+
+    function listenNotifications(uid){
+      const badge = document.getElementById("notifBadge");
+      const q = query(
+        collection(db,"requests"),
+        where("toUid","==",uid),
+        where("status","==","pending")
+      );
+
+      onSnapshot(q,(snap)=>{
+        badge.style.display = snap.size > 0 ? "block" : "none";
+      });
+    }
+
+    async function loadProfiles(currentUid){
+      const userSnap = await getDocs(collection(db, "users"));
+      
+      // Clear loading
+      cardsDiv.innerHTML = "";
+
+      if (userSnap.empty){
+        cardsDiv.innerHTML = `
+          <div class="message-box">
+            <i class='bx bx-ghost'></i>
+            <p>No profiles found yet.</p>
+          </div>`;
+        return;
+      }
+
+      let count = 0;
+
+      for (const docu of userSnap.docs) {
+        if (docu.id === currentUid) continue;
+
+        const d = docu.data();
+        if (!d.name || !d.offer || !d.want) continue;
+        count++;
+
+        const card = document.createElement("div");
+        card.className = "profile-card";
+
+        // Get initials for avatar
+        const initials = d.name.slice(0,2).toUpperCase();
+
+        card.innerHTML = `
+          <div class="card-decoration"></div>
+          
+          <div class="card-header">
+            <div class="avatar">${initials}</div>
+            <div class="user-info">
+              <h3>${d.name}</h3>
+              <span>Student</span>
+            </div>
+          </div>
+
+          <div class="skill-block">
+            <span class="label"><i class='bx bxs-book'></i> Can Teach</span>
+            <span class="skill-tag offer-text">${d.offer}</span>
+          </div>
+
+          <div class="skill-block">
+            <span class="label" style="color:#ec4899"><i class='bx bxs-bulb'></i> Wants to Learn</span>
+            <span class="skill-tag want-text">${d.want}</span>
+          </div>
+
+          <div class="card-footer">
+            <div class="contact-area"></div> <button class="connect-btn" data-to="${docu.id}">
+              Request to Connect <i class='bx bx-right-arrow-alt'></i>
+            </button>
+          </div>
+        `;
+
+        // Check if contact is unlocked
+        const q = query(
+          collection(db, "requests"),
+          where("fromUid", "==", currentUid),
+          where("toUid", "==", docu.id),
+          where("status", "==", "accepted")
+        );
+
+        const acceptedSnap = await getDocs(q);
+
+        if (!acceptedSnap.empty) {
+          const footer = card.querySelector(".card-footer");
+          // Replace button with contact info
+          footer.innerHTML = `
+            <div class="contact-revealed">
+              <div class="contact-row"><i class='bx bxs-phone'></i> ${d.phone || "No phone"}</div>
+              <div class="contact-row"><i class='bx bxs-envelope'></i> ${d.email || "No email"}</div>
+            </div>
+          `;
+        }
+
+        cardsDiv.appendChild(card);
+      }
+
+      if (count === 0){
+        cardsDiv.innerHTML = `
+          <div class="message-box">
+            <i class='bx bx-search'></i>
+            <p>No other students found.</p>
+          </div>`;
+      }
+    }
+
+    cardsDiv.addEventListener("click", async (e) => {
+      const btn = e.target.closest(".connect-btn");
+      if (!btn || !btn.dataset.to) return;
+
+      const toUid = btn.dataset.to;
+      const fromUid = auth.currentUser.uid;
+
+      const q = query(
+        collection(db,"requests"),
+        where("fromUid","==",fromUid),
+        where("toUid","==",toUid)
+      );
+      const snap = await getDocs(q);
+      if (!snap.empty){
+        alert("Request already sent");
+        return;
+      }
+
+      // Add loading state to button
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Sending...";
+
+      await addDoc(collection(db,"requests"),{
+        fromUid,
+        toUid,
+        status:"pending",
+        createdAt: serverTimestamp()
+      });
+
+      btn.innerHTML = "<i class='bx bx-check'></i> Request Sent";
+      btn.disabled = true;
+      btn.style.background = "#10b981"; // Green success
+    });
+
+    // Buttons
+    document.getElementById("logoutBtn").onclick = logoutUser;
+    document.getElementById("profileBtn").onclick = () => window.location.replace("profile.html");
+    document.getElementById("requestsBtn").onclick = () => window.location.replace("requests.html");
+    document.getElementById("friendsBtn").onclick = () => window.location.replace("accepted.html");
+  </script>
+
+</body>
+</html>
